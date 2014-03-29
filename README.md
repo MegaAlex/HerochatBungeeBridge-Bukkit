@@ -1,6 +1,9 @@
 HerochatBungeeBridge-Bukkit
 ===========================
 
+This is a fork of KoolKrafter's HerochatBungeeBridge-Bukkit as of 
+[c97b97f0d9ffe75818c982f13000d0dc359e0846](https://github.com/KoolKrafter/HerochatBungeeBridge-Bukkit/commit/c97b97f0d9ffe75818c982f13000d0dc359e0846).
+
 Cross server Herochat for BungeeCord - Bukkit plugin.
 
 http://www.spigotmc.org/resources/herochatbungeebridge-bukkit.188/
