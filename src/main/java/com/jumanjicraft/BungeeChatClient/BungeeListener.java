@@ -18,10 +18,19 @@ public class BungeeListener implements Listener {
 					Herochat.getChannelManager().getConversationFormat())) {
 				BungeeChatListener.TransmitChatMessage(
 						ChatColor.RESET
+								+ BungeeChatClient.vaultChat
+										.getPlayerPrefix(event.getSender()
+												.getPlayer())
 								+ event.getSender().getPlayer()
 										.getDisplayName()
-								+ event.getChannel().getColor() + ": "
-								+ event.getMessage(), event.getChannel()
+								+ BungeeChatClient.vaultChat
+										.getPlayerSuffix(event.getSender()
+												.getPlayer())
+								+ event.getChannel().getColor()
+								+ ": "
+								+ BungeeChatListener.parseMessage(
+										event.getMessage(), event.getSender(),
+										event.getChannel()), event.getChannel()
 								.getName());
 			}
 		}

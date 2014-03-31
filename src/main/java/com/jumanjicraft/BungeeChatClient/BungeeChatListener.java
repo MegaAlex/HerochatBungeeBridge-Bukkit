@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.dthielke.herochat.Channel;
+import com.dthielke.herochat.Chatter;
 import com.dthielke.herochat.Herochat;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -23,10 +24,11 @@ public class BungeeChatListener implements PluginMessageListener {
 				"BungeeChat");
 	}
 
-	public static void TransmitChatMessage(String message, String chatchannel) {
+	public static void TransmitChatMessage(String message, String chatChannel) {
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
-		out.writeUTF(chatchannel);
-		out.writeUTF(message);
+		out.writeUTF(chatChannel);
+		out.writeUTF(ChatColor.translateAlternateColorCodes('&', message));
+		
 		Bukkit.getOnlinePlayers()[0].sendPluginMessage(plugin, "BungeeChat",
 				out.toByteArray());
 	}
@@ -38,7 +40,6 @@ public class BungeeChatListener implements PluginMessageListener {
 		ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
 		String chatchannel = in.readUTF();
 		String message = in.readUTF();
-		message = ChatColor.translateAlternateColorCodes('&', message);
 		Channel channel = Herochat.getChannelManager().getChannel(chatchannel);
 		if (channel == null) {
 			Bukkit.getLogger()
@@ -51,14 +52,23 @@ public class BungeeChatListener implements PluginMessageListener {
 		StringBuilder msg = new StringBuilder(channel.applyFormat(
 				channel.getFormatSupplier().getAnnounceFormat(), "").replace(
 				"%2$s", message.replaceAll("(?i)&([a-fklmno0-9])", "\247$1")));
-		if (channel.getFormat().startsWith("[")) {
-			msg.deleteCharAt(2);
-			channel.sendRawMessage(ChatColor.GREEN + "[N" + ChatColor.RESET
-					+ msg);
-		} else {
-			channel.sendRawMessage(ChatColor.GREEN + "[N]" + ChatColor.RESET
-					+ msg);
+		channel.sendRawMessage(ChatColor.RESET + msg.toString());
+	}
+
+	public static String parseMessage(String msg, Chatter sender, Channel channel) {
+		String parsed = "";
+		for (int i = 0; i < msg.length() - 1; i++) {
+			if (msg.charAt(i) == '&') {
+				if (sender.canColorMessages(channel, ChatColor.getByChar(msg.charAt(i+1))) == Chatter.Result.ALLOWED) {
+					parsed = parsed + ChatColor.COLOR_CHAR + msg.charAt(i);
+				}
+				i++;
+			} else {
+				parsed += msg.charAt(i);
+			}
 		}
+		
+		return parsed;
 	}
 
 }
