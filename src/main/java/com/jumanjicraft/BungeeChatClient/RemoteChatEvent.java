@@ -18,7 +18,10 @@ public class RemoteChatEvent extends Event {
         this.message = message;
     }
 
-    @Override
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public HandlerList getHandlers() {
         return handlers;
     }
@@ -34,4 +37,6 @@ public class RemoteChatEvent extends Event {
     public String getMessage() {
         return message;
     }
+
+
 }

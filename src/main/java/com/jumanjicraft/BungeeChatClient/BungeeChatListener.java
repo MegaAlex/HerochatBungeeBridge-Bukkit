@@ -26,8 +26,8 @@ public class BungeeChatListener implements PluginMessageListener {
     public static void TransmitChatMessage(String sender, String message,
                                            String chatChannel, String raw) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF(sender);
         out.writeUTF(chatChannel);
+        out.writeUTF(sender);
         out.writeUTF(ChatColor.translateAlternateColorCodes('&', message));
         out.writeUTF(ChatColor.translateAlternateColorCodes('&', raw));
 
@@ -40,8 +40,8 @@ public class BungeeChatListener implements PluginMessageListener {
             return;
         }
         ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
-        String sender = in.readUTF();
         String chatChannel = in.readUTF();
+        String sender = in.readUTF();
         String message = in.readUTF();
         String raw = in.readUTF();
         Channel channel = Herochat.getChannelManager().getChannel(chatChannel);
